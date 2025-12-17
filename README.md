@@ -60,7 +60,7 @@ The program will use a Model-View-Controller (MVC) structure:
 * View: GUI (Tkinter)
 * Controller: Input handling and game flow
 ### Software used:
-* IDLE (Python GUI)
+* IDLE (Python 3.12 64-bit)
 * Tkinter
 
 ## Iterative Development Plan
@@ -82,6 +82,28 @@ The program will use a Model-View-Controller (MVC) structure:
 * Boundary testing (maximum incorrect guesses)
 * Peer testing within the group
 * Regression testing after changes
+
+## Coding & Testing
+### main.py code
+<img width="577" height="165" alt="Screenshot 2025-12-17 132039" src="https://github.com/user-attachments/assets/7d7b7d77-99d5-4ddb-a7fa-4cf1d192f276" />
+
+### gui.py code
+<img width="623" height="845" alt="Screenshot 2025-12-17 132422" src="https://github.com/user-attachments/assets/bfdbac51-e03c-480d-8b40-9791f9aaebb0" />
+<img width="666" height="898" alt="Screenshot 2025-12-17 132455" src="https://github.com/user-attachments/assets/3b40b575-e081-4ae9-8bf5-be0c1f36fb17" />
+
+### game_logic.py code 
+<img width="615" height="905" alt="Screenshot 2025-12-17 132657" src="https://github.com/user-attachments/assets/25aaf4f7-48d0-4a71-933e-edb080ba2a1f" />
+<img width="661" height="189" alt="Screenshot 2025-12-17 132714" src="https://github.com/user-attachments/assets/dad411d3-76f1-4b7b-b96e-c9ad63e0f3ce" />
+
+### Run program result
+### Win: 
+<img width="528" height="669" alt="Screenshot 2025-12-17 132937" src="https://github.com/user-attachments/assets/51a721d9-58b4-4a10-b24b-c1c887a42936" />
+
+### Loss: 
+<img width="411" height="648" alt="Screenshot 2025-12-17 133003" src="https://github.com/user-attachments/assets/92dd42b3-5644-4a43-a6af-4d2656f5b4fb" />
+
+### Testing Table
+<img width="720" height="438" alt="Screenshot 2025-12-17 135347" src="https://github.com/user-attachments/assets/a902dc14-7c61-48e8-910b-1194cd242c12" />
 
 ## Reflection
 Using an Agile approach helped the team focus on delivering core functionality first before improving the user interface. Regular communication ensured tasks were shared fairly, and iterative testing reduced defects early in development.

@@ -1,1 +1,189 @@
+## Beginning of the Hangman game. Creates and runs the Hangman GUI ##
 
+from gui import HangmanGUI
+
+def main():
+    app = HangmanGUI()
+    app.run()
+
+if __name__ == "__main__":
+    main()
+
+"""
+Handles the graphical user interface for the Hangman game using Tkinter.
+"""
+
+import tkinter as tk
+from tkinter import messagebox
+from game_logic import HangmanGame
+
+
+class HangmanGUI:
+    """
+    GUI controller class for the Hangman game.
+    """
+
+    def __init__(self):
+        # Create an instance of the game logic
+        self.game = HangmanGame()
+
+        # Create the main application window
+        self.window = tk.Tk()
+        self.window.title("Hangman Game")
+
+        # Label to display the current word state
+        self.word_label = tk.Label(self.window, font=("Arial", 24))
+        self.word_label.pack(pady=10)
+
+        # Label to show remaining attempts
+        self.attempts_label = tk.Label(self.window)
+        self.attempts_label.pack()
+
+        # Entry field for the user's letter guess
+        self.entry = tk.Entry(self.window, width=5)
+        self.entry.pack(pady=5)
+
+        # Button to submit a guess
+        self.guess_button = tk.Button(
+            self.window,
+            text="Guess Letter",
+            command=self.make_guess
+        )
+        self.guess_button.pack(pady=5)
+
+        # Button to restart the game
+        self.reset_button = tk.Button(
+            self.window,
+            text="Restart Game",
+            command=self.reset_game
+        )
+        self.reset_button.pack(pady=5)
+
+        # Update the GUI with initial values
+        self.update_display()
+
+    def update_display(self):
+        """
+        Updates all visual elements in the GUI.
+        """
+        self.word_label.config(text=self.game.get_display_word())
+        remaining_attempts = self.game.MAX_ATTEMPTS - self.game.incorrect_guesses
+        self.attempts_label.config(
+            text=f"Attempts remaining: {remaining_attempts}"
+        )
+
+    def make_guess(self):
+        """
+        Handles user input when a guess is made.
+        """
+        # Get and clean the user's input
+        letter = self.entry.get().lower()
+        self.entry.delete(0, tk.END)
+
+        # Validate input
+        if len(letter) != 1 or not letter.isalpha():
+            messagebox.showwarning(
+                "Invalid Input",
+                "Please enter a single alphabetical character."
+            )
+            return
+
+        # Process the guess through the game logic
+        self.game.guess_letter(letter)
+        self.update_display()
+
+        # Check for win condition
+        if self.game.is_won():
+            messagebox.showinfo("Hangman", "Congratulations! You won!")
+            self.reset_game()
+
+        # Check for loss condition
+        elif self.game.is_lost():
+            messagebox.showinfo(
+                "Hangman",
+                f"You lost! The word was '{self.game.secret_word}'."
+            )
+            self.reset_game()
+
+    def reset_game(self):
+        """
+        Resets the game and refreshes the display.
+        """
+        self.game.reset_game()
+        self.update_display()
+
+    def run(self):
+        """
+        Starts the Tkinter event loop.
+        """
+        self.window.mainloop()
+
+"""
+Contains the core game logic for Hangman.
+This file is independent of the GUI and manages the game state.
+"""
+
+import random
+
+
+class HangmanGame:
+    """
+    Represents a single game of Hangman.
+    """
+
+    MAX_ATTEMPTS = 6  # Maximum number of incorrect guesses allowed
+
+    def __init__(self):
+        # Predefined list of words to choose from
+        self.words = ["python", "agile", "software", "hangman", "project"]
+        self.reset_game()
+
+    def reset_game(self):
+        """
+        Resets the game to its initial state.
+        """
+        self.secret_word = random.choice(self.words)
+        self.guessed_letters = set()
+        self.incorrect_guesses = 0
+
+    def guess_letter(self, letter):
+        """
+        Processes a guessed letter.
+
+        Returns:
+            bool: True if the guess is correct, False otherwise.
+        """
+        # Ignore repeated guesses
+        if letter in self.guessed_letters:
+            return False
+
+        self.guessed_letters.add(letter)
+
+        # Check if the letter is in the secret word
+        if letter not in self.secret_word:
+            self.incorrect_guesses += 1
+            return False
+
+        return True
+
+    def get_display_word(self):
+        """
+        Returns the secret word with unguessed letters hidden.
+        Example: p _ t h o n
+        """
+        return " ".join(
+            letter if letter in self.guessed_letters else "_"
+            for letter in self.secret_word
+        )
+
+    def is_won(self):
+        """
+        Checks if the player has guessed all letters.
+        """
+        return all(letter in self.guessed_letters for letter in self.secret_word)
+
+    def is_lost(self):
+        """
+        Checks if the maximum number of attempts has been exceeded.
+        """
+        return self.incorrect_guesses >= self.MAX_ATTEMPTS
